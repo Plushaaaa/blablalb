@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Наша История Любви | Лена & Я</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        roseGold: '#B76E79',
+                        blushPink: '#FFD1DC',
+                        softRose: '#FFE4E1',
+                        deepBurgundy: '#4A0E17',
+                        romanticRed: '#E63946',
+                        warmCream: '#FFF8F0',
+                        darkBg: '#120A0C',
+                        darkCard: '#1E1215',
+                    },
+                    fontFamily: {
+                        serif: ['Cormorant Garamond', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    },
+                    animation: {
+                        'float-slow': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-15px) rotate(3deg)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.6', filter: 'drop-shadow(0 0 15px rgba(230, 57, 70, 0.4))' },
+                            '50%': { opacity: '1', filter: 'drop-shadow(0 0 25px rgba(230, 57, 70, 0.8))' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Floating Hearts Background Animation */
+        .floating-heart {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0;
+            animation: floatUp 8s linear infinite;
+        }
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) scale(0.5) rotate(0deg);
+                opacity: 0;
+            }
+            15% {
+                opacity: 0.6;
+            }
+            85% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-10vh) scale(1.2) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        /* Glassmorphism effects */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+        .dark .glass-card {
+            background: rgba(30, 18, 21, 0.8);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(183, 110, 121, 0.25);
+        }
+        /* Card Flip effect */
+        .flip-card {
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FFE4E1;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #120A0C;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #B76E79;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-warmCream dark:bg-darkBg text-gray-800 dark:text-gray-100 font-sans transition-colors duration-500 min-h-screen relative overflow-x-hidden">
+
+    <!-- Floating Background Particles (Hearts) -->
+    <div id="particles-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
+
+    <!-- Navigation Header -->
+    <nav class="fixed top-0 left-0 w-full z-40 glass-card transition-all duration-300 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="font-serif text-2xl md:text-3xl font-bold text-deepBurgundy dark:text-blushPink flex items-center gap-2">
+                Лена <i class="fa-solid fa-heart text-romanticRed text-sm animate-pulse"></i> Я
+            </a>
+            <div class="flex items-center gap-4">
+                <div class="hidden md:flex gap-6 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <a href="#counter" class="hover:text-roseGold transition-colors">Счётчик</a>
+                    <a href="#story" class="hover:text-roseGold transition-colors">Наша История</a>
+                    <a href="#gallery" class="hover:text-roseGold transition-colors">Галерея</a>
+                    <a href="#reasons" class="hover:text-roseGold transition-colors">Причины Любви</a>
+                    <a href="#notes" class="hover:text-roseGold transition-colors">Записки</a>
+                </div>
+                <!-- Theme Toggle Button -->
+                <button id="themeToggleBtn" aria-label="Сменить тему" class="p-2 rounded-full text-roseGold hover:bg-roseGold/10 transition-colors">
+                    <i class="fa-solid fa-moon text-xl dark:hidden"></i>
+                    <i class="fa-solid fa-sun text-xl hidden dark:inline"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="relative min-h-screen flex items-center justify-center pt-24 pb-12 px-4 z-10">
+        <div class="text-center max-w-4xl mx-auto space-y-8 animate-fade-in">
+            <div class="inline-block relative">
+                <span class="text-xs md:text-sm font-semibold uppercase tracking-widest text-roseGold bg-roseGold/10 px-4 py-1.5 rounded-full border border-roseGold/20 mb-4 inline-block">
+                    История нашей любви • 2026
+                </span>
+                <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl font-bold text-deepBurgundy dark:text-blushPink tracking-tight leading-none drop-shadow-sm">
+                    Лена & Я
+                </h1>
+                <p class="font-serif italic text-xl md:text-2xl text-gray-600 dark:text-gray-300 mt-4 max-w-xl mx-auto">
+                    «С той самой ночи в Юпитере и навеки вместе. Будем целоваться?»
+                </p>
+            </div>
+
+            <!-- Relationship Live Counter -->
+            <div id="counter" class="glass-card p-6 md:p-8 rounded-3xl shadow-xl border border-white/40 max-w-3xl mx-auto transition-transform hover:scale-[1.01]">
+                <div class="flex items-center justify-center gap-2 mb-6">
+                    <i class="fa-solid fa-clock text-roseGold text-lg"></i>
+                    <h2 class="text-lg md:text-xl font-semibold text-deepBurgundy dark:text-blushPink">Мы вместе уже:</h2>
+                    <button onclick="openDateModal()" title="Изменить дату начала" class="text-xs text-roseGold hover:underline ml-2">
+                        <i class="fa-solid fa-pen"></i>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-3 md:grid-cols-6 gap-2 md:gap-4 text-center">
+                    <div class="p-3 bg-white/50 dark:bg-black/20 rounded-2xl border border-roseGold/10">
+                        <span id="years" class="block font-serif text-3xl md:text-5xl font-bold text-deepBurgundy dark:text-roseGold">00</span>
+                        <span class="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">Лет</span>
+                    </div>
+                    <div class="p-3 bg-white/50 dark:bg-black/20 rounded-2xl border border-roseGold/10">
+                        <span id="months" class="block font-serif text-3xl md:text-5xl font-bold text-deepBurgundy dark:text-roseGold">00</span>
+                        <span class="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">Месяцев</span>
+                    </div>
+                    <div class="p-3 bg-white/50 dark:bg-black/20 rounded-2xl border border-roseGold/10">
+                        <span id="days" class="block font-serif text-3xl md:text-5xl font-bold text-deepBurgundy dark:text-roseGold">00</span>
+                        <span class="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">Дней</span>
+                    </div>
+                    <div class="p-3 bg-white/50 dark:bg-black/20 rounded-2xl border border-roseGold/10">
+                        <span id="hours" class="block font-serif text-3xl md:text-5xl font-bold text-deepBurgundy dark:text-roseGold">00</span>
+                        <span class="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">Часов</span>
+                    </div>
+                    <div class="p-3 bg-white/50 dark:bg-black/20 rounded-2xl border border-roseGold/10">
+                        <span id="minutes" class="block font-serif text-3xl md:text-5xl font-bold text-deepBurgundy dark:text-roseGold">00</span>
+                        <span class="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">Минут</span>
+                    </div>
+                    <div class="p-3 bg-white/50 dark:bg-black/20 rounded-2xl border border-roseGold/10">
+                        <span id="seconds" class="block font-serif text-3xl md:text-5xl font-bold text-romanticRed animate-pulse">00</span>
+                        <span class="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">Секунд</span>
+                    </div>
+                </div>
+
+                <p id="startDateDisplay" class="text-xs text-gray-500 dark:text-gray-400 mt-6">
+                    Отсчёт ведётся с <span id="startDateText" class="font-medium">30 апреля 2026</span> года
+                </p>
+            </div>
+
+            <!-- Call To Action Scroll -->
+            <a href="#story" class="inline-flex flex-col items-center text-roseGold hover:text-romanticRed transition-colors pt-4">
+                <span class="text-xs uppercase tracking-widest mb-2 font-medium">Исследовать нашу историю</span>
+                <i class="fa-solid fa-chevron-down text-lg animate-bounce"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- SECTION 2: OUR STORY TIMELINE -->
+    <section id="story" class="py-20 px-4 relative z-10 max-w-5xl mx-auto">
+        <div class="text-center mb-16">
+            <span class="text-roseGold font-semibold text-sm uppercase tracking-widest">Хронология 2026</span>
+            <h2 class="font-serif text-4xl md:text-5xl font-bold text-deepBurgundy dark:text-blushPink mt-1">Как развивалась наша сказка</h2>
+            <div class="w-16 h-1 bg-roseGold mx-auto mt-4 rounded-full"></div>
+        </div>
+
+        <div class="flex justify-end mb-8">
+            <button onclick="openTimelineModal()" class="px-5 py-2.5 bg-roseGold hover:bg-roseGold/90 text-white font-medium rounded-full shadow-lg shadow-roseGold/30 flex items-center gap-2 transition-all hover:scale-105 active:scale-95 text-sm">
+                <i class="fa-solid fa-plus"></i> Добавить момент
+            </button>
+        </div>
+
+        <!-- Timeline Container -->
+        <div class="relative border-l-2 border-roseGold/30 dark:border-roseGold/20 ml-4 md:ml-1/2 md:-translate-x-1/2 space-y-12" id="timelineContainer">
+            <!-- Timeline items rendered dynamically -->
+        </div>
+    </section>
+
+    <!-- SECTION 3: PHOTO & MEMORY GALLERY + 100 REASONS -->
+    <section id="gallery" class="py-20 px-4 glass-card my-12 relative z-10">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-roseGold font-semibold text-sm uppercase tracking-widest">Воспоминания 2026</span>
+                <h2 class="font-serif text-4xl md:text-5xl font-bold text-deepBurgundy dark:text-blushPink mt-1">Наша Галерея</h2>
+                <p class="text-gray-600 dark:text-gray-400 mt-2">Каждое фото — отдельная страница нашей судьбы</p>
+                <div class="w-16 h-1 bg-roseGold mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <!-- Photo Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-20" id="photoGalleryGrid">
+                <!-- Dynamic photos loaded here -->
+            </div>
+
+            <!-- REASONS WHY I LOVE YOU SUB-SECTION -->
+            <div id="reasons" class="pt-12 border-t border-roseGold/20">
+                <div class="text-center mb-10">
+                    <span class="text-roseGold font-semibold text-sm uppercase tracking-widest">От всего сердца</span>
+                    <h3 class="font-serif text-3xl md:text-4xl font-bold text-deepBurgundy dark:text-blushPink">Причины, почему я тебя люблю</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mt-2">Нажми на карту или сгенерируй случайную причину!</p>
+                </div>
+
+                <div class="max-w-md mx-auto">
+                    <!-- Interactive Flip Card -->
+                    <div id="reasonCard" class="flip-card w-full h-64 cursor-pointer" onclick="toggleCardFlip()">
+                        <div class="flip-card-inner relative w-full h-full rounded-3xl shadow-xl transition-transform duration-700">
+                            <!-- Card Front -->
+                            <div class="flip-card-front absolute inset-0 bg-gradient-to-br from-roseGold to-romanticRed text-white rounded-3xl p-8 flex flex-col items-center justify-center text-center shadow-lg">
+                                <i class="fa-solid fa-heart text-5xl mb-4 animate-pulse"></i>
+                                <h4 class="font-serif text-2xl font-bold">Нажми, чтобы узнать причину №<span id="reasonNumberFront">1</span></h4>
+                                <p class="text-xs text-white/80 mt-2">Кликни по карточке, чтобы перевернуть</p>
+                            </div>
+                            <!-- Card Back -->
+                            <div class="flip-card-back absolute inset-0 bg-white dark:bg-darkCard text-deepBurgundy dark:text-blushPink rounded-3xl p-8 flex flex-col items-center justify-center text-center border-2 border-roseGold/30 shadow-lg">
+                                <span class="text-xs uppercase tracking-widest text-roseGold font-bold mb-2">Причина №<span id="reasonNumberBack">1</span></span>
+                                <p id="reasonText" class="font-serif text-xl md:text-2xl italic font-semibold leading-relaxed">
+                                    "Твоя магия заворожила меня раз и навсегда!"
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 text-center">
+                        <button onclick="getRandomReason()" class="px-6 py-3 bg-deepBurgundy dark:bg-roseGold text-white font-medium rounded-full shadow-lg hover:bg-opacity-90 transition-all flex items-center gap-2 mx-auto">
+                            <i class="fa-solid fa-dice"></i> Выбрать случайную причину
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: INTERACTIVE LOVE NOTES & WISH BOX -->
+    <section id="notes" class="py-20 px-4 max-w-6xl mx-auto relative z-10">
+        <div class="text-center mb-12">
+            <span class="text-roseGold font-semibold text-sm uppercase tracking-widest">Доска любви 2026</span>
+            <h2 class="font-serif text-4xl md:text-5xl font-bold text-deepBurgundy dark:text-blushPink mt-1">Записки & Пожелания</h2>
+            <p class="text-gray-600 dark:text-gray-400 mt-2">Оставь романтическую записку. Сообщения сохраняются только для нас!</p>
+            <div class="w-16 h-1 bg-roseGold mx-auto mt-4 rounded-full"></div>
+        </div>
+
+        <!-- Note Input Form -->
+        <div class="max-w-xl mx-auto glass-card p-6 rounded-3xl shadow-lg border border-white/50 mb-12">
+            <form id="noteForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">От кого:</label>
+                    <input type="text" id="noteAuthor" placeholder="Твой любимый" required class="w-full px-4 py-2.5 rounded-xl border border-roseGold/30 bg-white/70 dark:bg-black/30 focus:outline-none focus:ring-2 focus:ring-roseGold">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Твое любовное послание:</label>
+                    <textarea id="noteContent" rows="3" placeholder="Напиши что-то нежное..." required class="w-full px-4 py-2.5 rounded-xl border border-roseGold/30 bg-white/70 dark:bg-black/30 focus:outline-none focus:ring-2 focus:ring-roseGold"></textarea>
+                </div>
+                <button type="submit" class="w-full py-3 bg-gradient-to-r from-roseGold to-romanticRed text-white font-semibold rounded-xl shadow-md hover:opacity-95 transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i> Прикрепить записку
+                </button>
+            </form>
+        </div>
+
+        <!-- Sticky Notes Grid -->
+        <div id="stickyNotesGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Dynamic sticky notes load here -->
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-12 border-t border-roseGold/20 text-center text-sm text-gray-500 dark:text-gray-400 relative z-10">
+        <div class="max-w-4xl mx-auto px-4 space-y-4">
+            <p class="font-serif text-xl italic text-deepBurgundy dark:text-blushPink">
+                «Ну что, будем целоваться?»
+            </p>
+            <p>© 2026 Создано с огромной любовью специально для <span class="text-roseGold font-semibold">Лены</span> ❤️</p>
+        </div>
+    </footer>
+
+    <!-- AMBIENT MUSIC PLAYER WIDGET -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <div id="musicPlayer" class="glass-card p-3 rounded-full shadow-2xl border border-white/60 flex items-center gap-3 transition-all duration-300 hover:pr-5">
+            <button id="playPauseBtn" onclick="toggleAudio()" class="w-12 h-12 rounded-full bg-gradient-to-tr from-roseGold to-romanticRed text-white flex items-center justify-center shadow-md focus:outline-none hover:scale-105 transition-transform">
+                <i id="playIcon" class="fa-solid fa-play ml-0.5"></i>
+            </button>
+            <div id="playerDetails" class="hidden md:flex flex-col pr-2">
+                <span class="text-xs font-bold text-deepBurgundy dark:text-blushPink truncate max-w-[120px]" id="songTitle">Романтика</span>
+                <span class="text-[10px] text-gray-500 dark:text-gray-400">Фоновая музыка</span>
+            </div>
+            <!-- Audio Waves Animation -->
+            <div id="audioVisualizer" class="hidden items-end gap-1 h-5 pr-2">
+                <span class="w-1 bg-roseGold h-2 rounded-full animate-bounce"></span>
+                <span class="w-1 bg-roseGold h-4 rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                <span class="w-1 bg-roseGold h-3 rounded-full animate-bounce [animation-delay:0.4s]"></span>
+            </div>
+        </div>
+        <!-- Hidden Audio Element -->
+        <audio id="bgAudio" loop preload="auto">
+            <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-piano-112199.mp3" type="audio/mpeg">
+            Ваш браузер не поддерживает аудио.
+        </audio>
+    </div>
+
+    <!-- MODAL 1: ADD TIMELINE MILESTONE -->
+    <div id="timelineModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-darkCard rounded-3xl p-6 md:p-8 max-w-lg w-full shadow-2xl border border-roseGold/30 relative animate-fade-in">
+            <button onclick="closeTimelineModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <h3 class="font-serif text-2xl font-bold text-deepBurgundy dark:text-blushPink mb-4">Добавить новое событие</h3>
+            <form id="timelineForm" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Заголовок события</label>
+                    <input type="text" id="tlTitle" required placeholder="Например: 'Наш памятный вечер'" class="w-full px-4 py-2 rounded-xl border border-roseGold/30 bg-transparent focus:outline-none focus:ring-2 focus:ring-roseGold">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Дата</label>
+                    <input type="date" id="tlDate" required value="2026-05-01" class="w-full px-4 py-2 rounded-xl border border-roseGold/30 bg-transparent focus:outline-none focus:ring-2 focus:ring-roseGold">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Описание / Воспоминание</label>
+                    <textarea id="tlDesc" rows="3" required placeholder="Расскажи, как это было..." class="w-full px-4 py-2 rounded-xl border border-roseGold/30 bg-transparent focus:outline-none focus:ring-2 focus:ring-roseGold"></textarea>
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="closeTimelineModal()" class="px-5 py-2 text-sm text-gray-500 hover:text-gray-700">Отмена</button>
+                    <button type="submit" class="px-6 py-2 bg-roseGold text-white text-sm font-semibold rounded-xl hover:bg-roseGold/90">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: CHANGE START DATE -->
+    <div id="dateModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-darkCard rounded-3xl p-6 max-w-md w-full shadow-2xl border border-roseGold/30 relative">
+            <button onclick="closeDateModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <h3 class="font-serif text-2xl font-bold text-deepBurgundy dark:text-blushPink mb-4">Дата начала отношений</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-gray-600 dark:text-gray-400 mb-1">Выберите дату и время:</label>
+                    <input type="datetime-local" id="newStartDateInput" value="2026-04-30T00:00" class="w-full px-4 py-2 rounded-xl border border-roseGold/30 bg-transparent focus:outline-none focus:ring-2 focus:ring-roseGold">
+                </div>
+                <button onclick="saveNewStartDate()" class="w-full py-2.5 bg-roseGold text-white font-semibold rounded-xl">Обновить счётчик</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LIGHTBOX MODAL FOR GALLERY -->
+    <div id="lightboxModal" class="fixed inset-0 bg-black/90 z-50 hidden flex items-center justify-center p-4" onclick="closeLightbox()">
+        <div class="relative max-w-4xl max-h-[90vh] w-full flex flex-col items-center justify-center">
+            <img id="lightboxImg" src="" alt="Увеличенное фото" class="max-h-[80vh] max-w-full rounded-2xl object-contain shadow-2xl">
+            <p id="lightboxCaption" class="text-white font-serif text-lg mt-4 text-center"></p>
+            <button class="absolute -top-10 right-0 text-white text-2xl hover:text-roseGold">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        /* --- 1. DEFAULT DATA & LOCAL STORAGE INITIALIZATION --- */
+        let startDate = new Date(localStorage.getItem('loveStartDate_2026') || '2026-04-30T00:00:00');
+        
+        let timelineData = JSON.parse(localStorage.getItem('loveTimeline_2026')) || [
+            { id: 1, title: 'Первая встреча в Юпитере 🍸', date: '2026-04-30', desc: 'Тот самый вечер в баре «Юпитер». Лена была невероятно веселой, пьяной и развратной... Тогда я еще не знал, что она самая настоящая ведьма, заворожившая меня!' },
+            { id: 2, title: 'На руках из бара 👑', date: '2026-04-30', desc: 'Первый раз выносил её из бара на руках. С тех пор так и таскаю её на руках при любом удобном случае.' },
+            { id: 3, title: 'Похищение сирени 💐', date: '2026-05-20', desc: 'Подвиг во имя любви: как я спиздил сирень у какого-то мужика с огорода и очень сильно упал! Зато добыл букет для любимой.' },
+            { id: 4, title: 'Замок наших сердец 🔒', date: '2026-08-15', desc: 'Тот самый момент, когда мы решили повесить замок и навсегда закрепить наши сердца.' },
+            { id: 5, title: 'Фирменная фишка каждый день 💖', date: '2026-10-22', desc: '«Ну что, будем целоваться?» — главный вопрос, который поднимает настроение каждый день.' }
+        ];
+
+        const reasonsList = [
+            "Твоя магия (ты ведьма, укравшая мое сердце!).",
+            "Обожаю таскать тебя на руках.",
+            "Наш фирменный вопрос: 'Будем целоваться?'",
+            "То, как круто мы зажигаем вместе еще с Юпитера.",
+            "Твоя реакция, когда я нес тебе краденую сирень.",
+            "Наш замок, который закрепил наши сердца.",
+            "Ты даришь мне неповторимые эмоции каждый день.",
+            "Твой невероятный характер и искренний смех."
+        ];
+
+        let notesData = JSON.parse(localStorage.getItem('loveNotes_2026')) || [
+            { id: 1, author: 'Твой любимый', text: 'Лена, ты моя любимая ведьмочка! Будем целоваться? ❤️', date: '22.10.2026' },
+            { id: 2, author: 'Я', text: 'Всегда готов выносить тебя из любого бара на руках!', date: '21.10.2026' }
+        ];
+
+        /* --- UPDATED PHOTO GALLERY WITH USER PHOTOS --- */
+        const samplePhotos = [
+            { url: 'image.png', caption: 'Краденая сирень для любимой 💐' },
+            { url: 'image_2.png', caption: 'Теплые объятия 🌅' },
+            { url: 'image_3.png', caption: 'Наш поцелуй 💋' },
+            { url: 'image_4.png', caption: 'Поездки вместе 🚗' },
+            { url: 'image_5.png', caption: 'Моя любимая ведьмочка ✨' },
+            { url: 'image_6.png', caption: 'Романтика на свежем воздухе 🍂' },
+            { url: 'image_7.png', caption: 'Таскаю на руках при любом удобном случае 👑' },
+            { url: 'image_8.png', caption: 'Уют вдвоем 🧣' }
+        ];
+
+        /* --- 2. FLOATING HEARTS ANIMATION --- */
+        function createFloatingHearts() {
+            const container = document.getElementById('particles-container');
+            const heartIcons = ['fa-heart', 'fa-sparkles', 'fa-heart-pulse'];
+            
+            setInterval(() => {
+                const heart = document.createElement('i');
+                const randomIcon = heartIcons[Math.floor(Math.random() * heartIcons.length)];
+                heart.className = `fa-solid ${randomIcon} floating-heart text-roseGold/40 dark:text-roseGold/20`;
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                heart.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                
+                container.appendChild(heart);
+
+                setTimeout(() => {
+                    heart.remove();
+                }, 10000);
+            }, 800);
+        }
+
+        /* --- 3. LIVE RELATIONSHIP COUNTER --- */
+        function updateCounter() {
+            const now = new Date();
+            const diff = now - startDate;
+
+            if (diff < 0) {
+                document.getElementById('years').innerText = '00';
+                document.getElementById('months').innerText = '00';
+                document.getElementById('days').innerText = '00';
+                document.getElementById('hours').innerText = '00';
+                document.getElementById('minutes').innerText = '00';
+                document.getElementById('seconds').innerText = '00';
+                return;
+            }
+
+            const seconds = Math.floor((diff / 1000) % 60);
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const daysTotal = Math.floor(diff / (1000 * 60 * 60 * 24));
+            
+            const years = Math.floor(daysTotal / 365);
+            const months = Math.floor((daysTotal % 365) / 30);
+            const days = Math.floor((daysTotal % 365) % 30);
+
+            document.getElementById('years').innerText = String(years).padStart(2, '0');
+            document.getElementById('months').innerText = String(months).padStart(2, '0');
+            document.getElementById('days').innerText = String(days).padStart(2, '0');
+            document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+            document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+            
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('startDateText').innerText = startDate.toLocaleDateString('ru-RU', options);
+        }
+
+        function openDateModal() {
+            document.getElementById('dateModal').classList.remove('hidden');
+        }
+        function closeDateModal() {
+            document.getElementById('dateModal').classList.add('hidden');
+        }
+        function saveNewStartDate() {
+            const val = document.getElementById('newStartDateInput').value;
+            if (val) {
+                startDate = new Date(val);
+                localStorage.setItem('loveStartDate_2026', startDate.toISOString());
+                updateCounter();
+                closeDateModal();
+            }
+        }
+
+        /* --- 4. RENDER TIMELINE --- */
+        function renderTimeline() {
+            const container = document.getElementById('timelineContainer');
+            container.innerHTML = '';
+
+            timelineData.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            timelineData.forEach((item, index) => {
+                const formattedDate = new Date(item.date).toLocaleDateString('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' });
+                const isEven = index % 2 === 0;
+
+                const node = document.createElement('div');
+                node.className = `relative flex flex-col md:flex-row items-start ${isEven ? 'md:flex-row-reverse' : ''} group`;
+
+                node.innerHTML = `
+                    <div class="absolute left-[-25px] md:left-1/2 md:-translate-x-1/2 w-6 h-6 rounded-full bg-roseGold border-4 border-warmCream dark:border-darkBg group-hover:scale-125 transition-transform shadow-md z-20 flex items-center justify-center">
+                        <span class="w-1.5 h-1.5 bg-white rounded-full"></span>
+                    </div>
+
+                    <div class="ml-6 md:ml-0 md:w-1/2 ${isEven ? 'md:pr-12 md:text-right' : 'md:pl-12'} w-full">
+                        <div class="glass-card p-6 rounded-2xl shadow-lg border border-white/40 hover:shadow-xl transition-all duration-300">
+                            <span class="inline-block px-3 py-1 bg-roseGold/10 text-roseGold text-xs font-semibold rounded-full mb-2">${formattedDate}</span>
+                            <h3 class="font-serif text-2xl font-bold text-deepBurgundy dark:text-blushPink mb-2">${item.title}</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">${item.desc}</p>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(node);
+            });
+        }
+
+        function openTimelineModal() {
+            document.getElementById('timelineModal').classList.remove('hidden');
+        }
+        function closeTimelineModal() {
+            document.getElementById('timelineModal').classList.add('hidden');
+        }
+
+        document.getElementById('timelineForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const title = document.getElementById('tlTitle').value;
+            const date = document.getElementById('tlDate').value;
+            const desc = document.getElementById('tlDesc').value;
+
+            timelineData.push({ id: Date.now(), title, date, desc });
+            localStorage.setItem('loveTimeline_2026', JSON.stringify(timelineData));
+            renderTimeline();
+            closeTimelineModal();
+            this.reset();
+        });
+
+        /* --- 5. GALLERY & LIGHTBOX --- */
+        function renderGallery() {
+            const grid = document.getElementById('photoGalleryGrid');
+            grid.innerHTML = '';
+
+            samplePhotos.forEach((photo) => {
+                const card = document.createElement('div');
+                card.className = 'group relative overflow-hidden rounded-3xl shadow-lg cursor-pointer h-72';
+                card.onclick = () => openLightbox(photo.url, photo.caption);
+
+                card.innerHTML = `
+                    <img src="${photo.url}" alt="${photo.caption}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                        <p class="text-white font-serif text-lg font-semibold">${photo.caption}</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function openLightbox(url, caption) {
+            document.getElementById('lightboxImg').src = url;
+            document.getElementById('lightboxCaption').innerText = caption;
+            document.getElementById('lightboxModal').classList.remove('hidden');
+        }
+        function closeLightbox() {
+            document.getElementById('lightboxModal').classList.add('hidden');
+        }
+
+        /* --- 6. 100 REASONS WHY I LOVE YOU --- */
+        let currentReasonIdx = 0;
+
+        function toggleCardFlip() {
+            document.getElementById('reasonCard').classList.toggle('flipped');
+        }
+
+        function getRandomReason() {
+            const card = document.getElementById('reasonCard');
+            card.classList.remove('flipped');
+
+            setTimeout(() => {
+                currentReasonIdx = Math.floor(Math.random() * reasonsList.length);
+                document.getElementById('reasonNumberFront').innerText = currentReasonIdx + 1;
+                document.getElementById('reasonNumberBack').innerText = currentReasonIdx + 1;
+                document.getElementById('reasonText').innerText = `"${reasonsList[currentReasonIdx]}"`;
+                
+                setTimeout(() => {
+                    card.classList.add('flipped');
+                }, 150);
+            }, 300);
+        }
+
+        /* --- 7. STICKY NOTES --- */
+        function renderNotes() {
+            const grid = document.getElementById('stickyNotesGrid');
+            grid.innerHTML = '';
+
+            notesData.forEach(note => {
+                const sticky = document.createElement('div');
+                sticky.className = 'p-6 rounded-2xl bg-amber-100/90 dark:bg-amber-900/30 text-gray-800 dark:text-amber-100 shadow-md border border-amber-200/50 dark:border-amber-700/30 flex flex-col justify-between h-48 transform hover:-translate-y-1 transition-transform relative group';
+                
+                sticky.innerHTML = `
+                    <button onclick="deleteNote(${note.id})" class="absolute top-3 right-3 text-gray-400 hover:text-romanticRed opacity-0 group-hover:opacity-100 transition-opacity">
+                        <i class="fa-solid fa-trash-can text-sm"></i>
+                    </button>
+                    <p class="font-serif italic text-base leading-relaxed overflow-y-auto mb-2">"${note.text}"</p>
+                    <div class="border-t border-amber-200/60 dark:border-amber-700/40 pt-2 flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
+                        <span class="font-semibold text-roseGold">${note.author}</span>
+                        <span>${note.date}</span>
+                    </div>
+                `;
+                grid.appendChild(sticky);
+            });
+        }
+
+        document.getElementById('noteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const author = document.getElementById('noteAuthor').value;
+            const text = document.getElementById('noteContent').value;
+            const date = new Date().toLocaleDateString('ru-RU');
+
+            notesData.unshift({ id: Date.now(), author, text, date });
+            localStorage.setItem('loveNotes_2026', JSON.stringify(notesData));
+            renderNotes();
+            this.reset();
+        });
+
+        function deleteNote(id) {
+            notesData = notesData.filter(n => n.id !== id);
+            localStorage.setItem('loveNotes_2026', JSON.stringify(notesData));
+            renderNotes();
+        }
+
+        /* --- 8. MUSIC PLAYER CONTROL --- */
+        const bgAudio = document.getElementById('bgAudio');
+        let isPlaying = false;
+
+        function toggleAudio() {
+            const playIcon = document.getElementById('playIcon');
+            const visualizer = document.getElementById('audioVisualizer');
+
+            if (isPlaying) {
+                bgAudio.pause();
+                playIcon.className = 'fa-solid fa-play ml-0.5';
+                visualizer.classList.add('hidden');
+                visualizer.classList.remove('flex');
+            } else {
+                bgAudio.play().then(() => {
+                    playIcon.className = 'fa-solid fa-pause';
+                    visualizer.classList.remove('hidden');
+                    visualizer.classList.add('flex');
+                }).catch(err => {
+                    console.log("Audio play blocked", err);
+                });
+            }
+            isPlaying = !isPlaying;
+        }
+
+        /* --- 9. DARK / LIGHT THEME TOGGLE --- */
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        /* --- INITIALIZATION --- */
+        window.onload = function() {
+            createFloatingHearts();
+            updateCounter();
+            setInterval(updateCounter, 1000);
+            renderTimeline();
+            renderGallery();
+            renderNotes();
+        };
+    </script>
+</body>
+</html>
